@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "id": "io.github.kyryl-bogach.camera-blur",
+  "name": "Camera Blur",
+  "version": "0.1.0",
+  "author": "Kyryl Bogach",
+  "license": "MIT",
+  "description": "Toggle AI background blur from the Omarchy bar. Controls the third-party NV Broadcast app (unofficial NVIDIA Broadcast for Linux) through its virtual camera.",
+  "kinds": ["bar-widget"],
+  "entryPoints": { "barWidget": "BarWidget.qml" },
+  "barWidget": {
+    "displayName": "Camera Blur",
+    "description": "Toggle AI background blur from the bar. Requires NV Broadcast 1.5+ (source install).",
+    "category": "System",
+    "allowMultiple": false,
+    "defaultSection": "right"
+  }
+}
