@@ -25,40 +25,27 @@ NV Broadcast is an unofficial NVIDIA Broadcast alternative. Its GPL-3.0 license 
 
 ## Install NV Broadcast
 
-The AUR package does not contain the remote actions that this plugin needs. Install the tested source revision:
+The AUR package does not contain the remote actions that this plugin needs. Use the reviewed installer from this repository:
 
 ```bash
-git clone https://github.com/Hkshoonya/nvidia-broadcast-linux.git nvidia-broadcast-linux &&
-git -C nvidia-broadcast-linux checkout --detach 328c318fd260e1bea01e87f184023fba69c172c3 &&
-cd nvidia-broadcast-linux &&
-./install.sh --runtime cuda
+git clone https://github.com/kyryl-bogach/omarchy-camera-blur.git &&
+cd omarchy-camera-blur &&
+./scripts/install-nvbroadcast.sh "$HOME/Applications/nvidia-broadcast-linux"
 ```
 
-The source installer installs packages and configures `/dev/video10`. Review the upstream installer before you run it.
+The installer supports CPython 3.14 on Linux x86_64. It checks out NV Broadcast commit `328c318fd260e1bea01e87f184023fba69c172c3`.
 
-### Enable remote control on Hyprland
+The installer applies the reviewed Hyprland action patch. It also configures `/dev/video10` through the upstream installer.
 
-NV Broadcast disables its application actions when the GlobalShortcuts portal rejects registration. Hyprland currently triggers this condition.
+The CUDA lock pins each Python package to one version and one SHA-256 wheel hash. The installer enforces the lock with `pip --require-hashes --only-binary=:all: --ignore-installed`.
 
-Change `src/nvbroadcast/app.py` in `NVBroadcastApp._set_global_hotkey_actions_enabled`:
+Review these files before you run the installer:
 
-```python
-action.set_enabled(True)  # Replace action.set_enabled(bool(enabled))
-```
+- `scripts/install-nvbroadcast.sh`
+- `requirements/nvbroadcast-cuda-py314.lock`
+- `patches/nvbroadcast-328c318f.patch`
 
-Activate the edited source in the existing environment:
-
-```bash
-.venv/bin/pip install -e . --no-deps
-```
-
-Restart NV Broadcast after this change. The plugin then calls this application action:
-
-```bash
-gapplication action com.doczeus.NVBroadcast toggle-background
-```
-
-This workaround changes the third-party application. Reapply or remove it when you update NV Broadcast.
+The upstream installer can install Arch packages and configure system services. The NV Broadcast GPL-3.0 license and security model apply separately.
 
 ## Install the plugin
 

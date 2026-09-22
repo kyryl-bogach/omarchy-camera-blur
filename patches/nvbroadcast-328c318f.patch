@@ -1,0 +1,39 @@
+diff --git a/install.sh b/install.sh
+index 12238f9..e334da7 100755
+--- a/install.sh
++++ b/install.sh
+@@ -641,7 +641,8 @@
+ prepare_virtual_environment() {
+     if [ ! -d "$VENV_DIR" ]; then
+         create_virtual_environment
+     fi
+-    "$VENV_DIR/bin/pip" install --upgrade \
+-        "pip>=26.2" "setuptools>=83.0.0" wheel -q
++    : "${NVBROADCAST_LOCK_FILE:?Set NVBROADCAST_LOCK_FILE to the reviewed requirements lock}"
++    "$VENV_DIR/bin/pip" install --require-hashes --only-binary=:all: \
++        --ignore-installed --no-deps --requirement "$NVBROADCAST_LOCK_FILE" -q
+ }
+@@ -754,5 +755,6 @@
+         install_cupy="${install_cupy:-Y}"
+         if [[ "$install_cupy" =~ ^[Yy]$ ]]; then
+             echo "  Installing CuPy (this may take a few minutes)..."
+-            if "$VENV_DIR/bin/pip" install "cupy-cuda12x>=14.1.1,<15" nvidia-cuda-runtime-cu12 nvidia-cuda-nvrtc-cu12 -q 2>&1; then
++            if "$VENV_DIR/bin/pip" install --require-hashes --only-binary=:all: \
++                --ignore-installed --no-deps --requirement "$NVBROADCAST_LOCK_FILE" -q 2>&1; then
+                 if CUPY_TEST=$("$VENV_DIR/bin/python" -c "from nvbroadcast.core.platform import preload_nvidia_runtime_libs; preload_nvidia_runtime_libs(); import cupy; a=cupy.ones(10); print('OK')" 2>&1); then
+diff --git a/scripts/install_runtime_variant.py b/scripts/install_runtime_variant.py
+index 74ec000..9ca9b58 100644
+--- a/scripts/install_runtime_variant.py
++++ b/scripts/install_runtime_variant.py
+@@ -178,3 +178,3 @@
+     selected_extras = ",".join(extras)
+-    install_arguments = ["install", "--upgrade"]
++    install_arguments = ["install", "--no-deps", "--no-build-isolation"]
+     if editable:
+diff --git a/src/nvbroadcast/app.py b/src/nvbroadcast/app.py
+index c71bfec..feef547 100755
+--- a/src/nvbroadcast/app.py
++++ b/src/nvbroadcast/app.py
+@@ -536 +536 @@ class NVBroadcastApp(Adw.Application):
+-                action.set_enabled(bool(enabled))
++                action.set_enabled(True)
