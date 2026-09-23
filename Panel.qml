@@ -452,9 +452,9 @@ Panel {
 
           Text {
             width: parent.width
-            text: "git clone https://github.com/Hkshoonya/nvidia-broadcast-linux.git\n"
-              + "cd nvidia-broadcast-linux\n"
-              + "./install.sh --runtime cuda\n\n"
+            text: "git clone https://github.com/kyryl-bogach/omarchy-camera-blur.git &&\n"
+              + "cd omarchy-camera-blur &&\n"
+              + "./scripts/install-nvbroadcast.sh \"$HOME/Applications/nvidia-broadcast-linux\"\n\n"
               + "See the plugin README for the remote-toggle setup."
             color: root.contentForeground
             font.family: "monospace"
